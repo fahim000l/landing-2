@@ -1,6 +1,15 @@
 import React from 'react'
 
-const Button = ({ onClick, children, type }) => {
+
+
+interface props {
+    onClick?: () => void;
+    children: React.ReactNode;
+    type?: "submit" | "reset" | "button" | undefined
+}
+
+
+const Button = ({ onClick, children, type }: props) => {
 
     return (
 

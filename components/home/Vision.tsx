@@ -32,7 +32,7 @@ const Vision = () => {
                     </p>
                     {
                         !isExpanded &&
-                        <Button onClick={() => setIsExpanded(true)} text={"Read More"}>Read More</Button>
+                        <Button onClick={() => setIsExpanded(true)}>Read More</Button>
                     }
                 </div>
             </div>

@@ -1,10 +1,15 @@
 import Footer from "@/components/Main/Footer"
 import Header from "@/components/Main/Header"
-import Modal from "@/tools/Modal"
 import { Toaster } from "react-hot-toast"
 import React from 'react'
 
-const Main = ({ children }) => {
+
+interface props {
+    children: React.ReactNode
+}
+
+
+const Main = ({ children }: props) => {
 
 
     return (

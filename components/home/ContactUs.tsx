@@ -1,8 +1,9 @@
 import Button from '@/tools/Button'
-import EmailJs from '@emailjs/browser'
+// import EmailJs from '@emailjs/browser'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 import React from 'react'
+import { useFormik } from 'formik'
 
 
 
@@ -11,64 +12,84 @@ const ContactUs = () => {
 
     const [error, setError] = useState(null)
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        setError(null)
-        const form = e.target
 
-        const firstName = form.firstName.value
-        const lastName = form.lastName.value
-        const email = form.email.value
-        const subject = form.subject.value
-        const message = form.message.value
 
-        const formData = {
-            to_name: "TNC GLOBAL LTD",
-            from_name: `${firstName} ${lastName}`,
-            message: message,
-            reply_to: email,
-            subject
+
+    const Formik = useFormik({
+        initialValues: {
+            to_name: 'TNC GLOBAL LTD',
+            firstName: '',
+            LastName: '',
+            message: '',
+            reply_to: "",
+            subject: ''
+        },
+        onSubmit: (values) => {
+            console.log(values)
         }
-
-        if (!firstName) {
-            setError({ field: "firstName", text: "First Name is required" })
-            return
-        }
-
-        if (!lastName) {
-            setError({ field: 'lastName', text: "Last Name is required" })
-            return
-        }
-
-        if (!email) {
-            setError({ field: "email", text: "Email is required" })
-            return
-        }
-
-        if (!subject) {
-            setError({ field: "subject", text: "Subject is required" })
-            return
-        }
-
-        if (!message) {
-            setError({ field: "message", text: "Message is required" })
-            return
-        }
+    })
 
 
 
-        console.log(process.env.NEXT_PUBLIC_EMAIL_TEMPLATE_ID)
 
-        EmailJs.send(process.env.NEXT_PUBLIC_EMAIL_JS_SERVICE_ID, process.env.NEXT_PUBLIC_EMAIL_TEMPLATE_ID, formData, { publicKey: process.env.NEXT_PUBLIC_EMAIL_JS_PUBLIC_KEY }).then(({ status, text }) => {
-            if (status === 200) {
+    // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    //     e.preventDefault()
+    //     setError(null)
+    //     const form = e.target
 
-                console.log(formData)
-                toast.success(`Your message is delevered`)
-                form.reset()
-            }
-        })
+    //     const firstName: string = (form?.firstName as HTMLInputElement).value
+    //     const lastName = form.lastName.value
+    //     const email = form.email.value
+    //     const subject = form.subject.value
+    //     const message = form.message.value
 
-    }
+    //     const formData = {
+    //         to_name: "TNC GLOBAL LTD",
+    //         from_name: `${firstName} ${lastName}`,
+    //         message: message,
+    //         reply_to: email,
+    //         subject
+    //     }
+
+    //     if (!firstName) {
+    //         setError({ field: "firstName", text: "First Name is required" })
+    //         return
+    //     }
+
+    //     if (!lastName) {
+    //         setError({ field: 'lastName', text: "Last Name is required" })
+    //         return
+    //     }
+
+    //     if (!email) {
+    //         setError({ field: "email", text: "Email is required" })
+    //         return
+    //     }
+
+    //     if (!subject) {
+    //         setError({ field: "subject", text: "Subject is required" })
+    //         return
+    //     }
+
+    //     if (!message) {
+    //         setError({ field: "message", text: "Message is required" })
+    //         return
+    //     }
+
+
+
+    //     console.log(process.env.NEXT_PUBLIC_EMAIL_TEMPLATE_ID)
+
+    //     EmailJs.send(process.env.NEXT_PUBLIC_EMAIL_JS_SERVICE_ID, process.env.NEXT_PUBLIC_EMAIL_TEMPLATE_ID, formData, { publicKey: process.env.NEXT_PUBLIC_EMAIL_JS_PUBLIC_KEY }).then(({ status, text }) => {
+    //         if (status === 200) {
+
+    //             console.log(formData)
+    //             toast.success(`Your message is delevered`)
+    //             form.reset()
+    //         }
+    //     })
+
+    // }
 
 
 
@@ -77,38 +98,38 @@ const ContactUs = () => {
 
     return (
         <div id='contact_us' className="bg-[white] lg:w-[70rem] mx-auto lg:rounded-[10px] flex lg:flex-row flex-col-reverse mt-10">
-            <form onSubmit={handleSubmit} className="lg:p-10 p-5 flex flex-col space-y-4 w-full">
+            <form className="lg:p-10 p-5 flex flex-col space-y-4 w-full">
                 <div className="flex items-start space-x-4" >
                     <div className='w-full'>
-                        <input name='firstName' type="text" className={`border-2 ${error?.field === 'firstName' ? 'border-red-500' : ''} rounded-[5px] w-full pl-2 py-2`} placeholder="First Name" />
-                        {
+                        <input {...Formik.getFieldProps('firstName')} type="text" className={"border-2 ${error?.field === 'firstName' ? 'border-red-500' : ''} rounded-[5px] w-full pl-2 py-2"} placeholder="First Name" />
+                        {/* {
                             error?.field === 'firstName' && <p className='text-red-500'>{error.text}</p>
-                        }
+                        } */}
                     </div>
                     <div className='w-full'>
-                        <input name='lastName' type="text" className={`border-2 ${error?.field === 'lastName' ? 'border-red-500' : ''} rounded-[5px] w-full pl-2 py-2`} placeholder="Last Name" />
-                        {
+                        <input {...Formik.getFieldProps('lastName')} type="text" className={"border-2 ${error?.field === 'lastName' ? 'border-red-500' : ''} rounded-[5px] w-full pl-2 py-2"} placeholder="Last Name" />
+                        {/* {
                             error?.field === 'lastName' && <p className='text-red-500'>{error.text}</p>
-                        }
+                        } */}
                     </div>
                 </div>
                 <div className='w-full'>
-                    <input name='email' type="text" className={`border-2 ${error?.field === 'email' ? 'border-red-500' : ''} rounded-[5px] w-full pl-2 py-2`} placeholder="Email" />
-                    {
+                    <input {...Formik.getFieldProps('reply_to')} type="text" className={"border-2 ${error?.field === 'email' ? 'border-red-500' : ''} rounded-[5px] w-full pl-2 py-2"} placeholder="Email" />
+                    {/* {
                         error?.field === 'email' && <p className='text-red-500'>{error.text}</p>
-                    }
+                    } */}
                 </div>
                 <div className='w-full'>
-                    <input name='subject' type="text" className={`border-2 ${error?.field === 'subject' ? 'border-red-500' : ''} rounded-[5px] w-full pl-2 py-2`} placeholder="Subject" />
-                    {
+                    <input {...Formik.getFieldProps('subject')} type="text" className={"border-2 ${error?.field === 'subject' ? 'border-red-500' : ''} rounded-[5px] w-full pl-2 py-2"} placeholder="Subject" />
+                    {/* {
                         error?.field === 'subject' && <p className='text-red-500'>{error.text}</p>
-                    }
+                    } */}
                 </div>
                 <div>
-                    <textarea placeholder='Message...' name="message" id="" cols="30" rows="10" className={`border-2 ${error?.field === 'message' ? 'border-red-500' : ''} rounded-[5px] w-full pl-2 py-2`}></textarea>
-                    {
+                    <textarea placeholder='Message...' {...Formik.getFieldProps('message')} id="" cols={30} rows={10} className={"border-2 ${error?.field === 'message' ? 'border-red-500' : ''} rounded-[5px] w-full pl-2 py-2"}></textarea>
+                    {/* {
                         error?.field === 'message' && <p className='text-red-500'>{error.text}</p>
-                    }
+                    } */}
                 </div>
                 <Button type={'submit'} >Send</Button>
             </form>
